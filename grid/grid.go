@@ -1,15 +1,12 @@
 package grid
 
-import (
-	. "github.com/badgerodon/collections"
-)
-
-type (
-	Grid struct {
-		values     []interface{}
-		cols, rows int
-	}
-)
+type Point struct {
+	X, Y int
+}
+type Grid struct {
+	values     []interface{}
+	cols, rows int
+}
 
 func New(cols, rows int) *Grid {
 	return &Grid{
@@ -19,34 +16,33 @@ func New(cols, rows int) *Grid {
 	}
 }
 
-func (this *Grid) Do(f func(p Point, value interface{})) {
-	for x := 0; x < this.cols; x++ {
-		for y := 0; y < this.rows; y++ {
-			f(Point{x, y}, this.values[x*this.cols+y])
+func (g *Grid) Do(f func(p Point, value interface{})) {
+	for x := 0; x < g.cols; x++ {
+		for y := 0; y < g.rows; y++ {
+			f(Point{x, y}, g.values[y*g.cols+x])
 		}
 	}
 }
 
-func (this *Grid) Get(p Point) interface{} {
-	if p.X < 0 || p.Y < 0 || p.X >= this.cols || p.Y >= this.rows {
+func (g *Grid) Get(p Point) interface{} {
+	if p.X < 0 || p.Y < 0 || p.X >= g.cols || p.Y >= g.rows {
 		return nil
 	}
-	v, _ := this.values[p.X*this.cols+p.Y]
-	return v
+	return g.values[p.Y*g.cols+p.X]
 }
 
-func (this *Grid) Rows() int {
-	return this.rows
+func (g *Grid) Rows() int {
+	return g.rows
 }
 
-func (this *Grid) Cols() int {
-	return this.cols
+func (g *Grid) Cols() int {
+	return g.cols
 }
 
-func (this *Grid) Len() int {
-	return this.rows * this.cols
+func (g *Grid) Len() int {
+	return g.rows * g.cols
 }
 
-func (this *Grid) Set(p Point, v interface{}) {
-
+func (g *Grid) Set(p Point, v interface{}) {
+	g.values[p.Y*g.cols+p.X] = v
 }
