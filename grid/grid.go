@@ -1,8 +1,7 @@
 package grid
 
-type Point struct {
-	X, Y int
-}
+import "image"
+
 type Grid struct {
 	values     []interface{}
 	cols, rows int
@@ -16,15 +15,15 @@ func New(cols, rows int) *Grid {
 	}
 }
 
-func (g *Grid) Do(f func(p Point, value interface{})) {
+func (g *Grid) Do(f func(p image.Point, value interface{})) {
 	for x := 0; x < g.cols; x++ {
 		for y := 0; y < g.rows; y++ {
-			f(Point{x, y}, g.values[y*g.cols+x])
+			f(image.Point{x, y}, g.values[y*g.cols+x])
 		}
 	}
 }
 
-func (g *Grid) Get(p Point) interface{} {
+func (g *Grid) Get(p image.Point) interface{} {
 	if p.X < 0 || p.Y < 0 || p.X >= g.cols || p.Y >= g.rows {
 		return nil
 	}
@@ -43,6 +42,6 @@ func (g *Grid) Len() int {
 	return g.rows * g.cols
 }
 
-func (g *Grid) Set(p Point, v interface{}) {
+func (g *Grid) Set(p image.Point, v interface{}) {
 	g.values[p.Y*g.cols+p.X] = v
 }
